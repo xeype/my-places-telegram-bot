@@ -1,2 +1,6 @@
+# Virtual env
 .idea
 .venv
+
+# Configuration files
+config.ini
