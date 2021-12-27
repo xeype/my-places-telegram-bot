@@ -3,4 +3,4 @@
 .venv
 
 # Configuration files
-config.ini
+*.ini
