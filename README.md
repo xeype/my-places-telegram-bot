@@ -1,5 +1,11 @@
 # my-places-telegram-bot
 
+#### About
+A simple bot to save the places you've visited.   
+There is an opportunity to add a title, rating and your opinion about the place.  
+  
+**Note:** *when using non-integer ratings, the default value 5 (/5) will be added*
+
 #### Quick Setup
 
 1. Clone the repository.   
