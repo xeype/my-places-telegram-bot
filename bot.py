@@ -72,7 +72,13 @@ def handle_buttons(message):
     if message.text == const.ADD_PLACE:
         handle_add(message)
     elif message.text == const.SHOW_LIST:
-        bot.send_message(message.chat.id, 'List', parse_mode='markdown')
+        bot.send_message(message.chat.id, 'My Places', parse_mode='markdown')
+        places = dbHandler.get_places(message.from_user.id)
+        message_with_places = ''
+        for place_name, rating, desc in places:
+            message_with_places += f'*{place_name}*\nRating: {rating}\nDescription: {desc}\n\n'
+
+        bot.send_message(message.chat.id, message_with_places, parse_mode='markdown')
     else:
         handler_unknown(message)
 
