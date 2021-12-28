@@ -13,3 +13,12 @@ def db_table_val(user_id: int, username: str):
 def add_place(user_id: int, place_name: str, rating: int, place_desc: str):
     cursor.execute(queries.add_place, (user_id, place_name, rating, place_desc))
     conn.commit()
+
+
+def get_places(user_id):
+    places = []
+    query_str = queries.get_places.format(user_id)
+    query = cursor.execute(query_str)
+    for place_name, rating, desc in query:
+        places.append((place_name, rating, desc))
+    return places
