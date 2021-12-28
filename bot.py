@@ -22,23 +22,34 @@ def handle_start_help(message):
 
         dbHandler.db_table_val(us_id, username)
     elif message.text == const.HELP_COMMAND:
-        bot.send_message(message.chat.id, const.HELP_OUTPUT, reply_markup=keyboard)
+        bot.send_message(message.chat.id, const.HELP_OUTPUT, reply_markup=keyboard, parse_mode='markdown')
 
 
 @bot.message_handler(commands=['add', 'list'])
 def handle_add_list(message):
     if message.text == const.ADD_COMMAND:
-        bot.send_message(message.chat.id, 'Add place', parse_mode='markdown')
+        sent = bot.send_message(message.chat.id, 'Enter name of the place')
+        bot.register_next_step_handler(sent, add_place_request)
     elif message.text == const.LIST_COMMAND:
         bot.send_message(message.chat.id, 'My places', parse_mode='markdown')
+    else:
+        bot.send_message(message.chat.id, const.UNKNOWN_OUTPUT, parse_mode='markdown')
 
 
-@bot.message_handler(content_types='text')
-def handle_buttons(message):
+@bot.message_handler(content_types=['text'])
+def handle_button(message):
     if message.text == const.ADD_PLACE:
-        bot.send_message(message.chat.id, 'Add place', parse_mode='markdown')
+        sent = bot.send_message(message.chat.id, 'Enter name of the place')
+        bot.register_next_step_handler(sent, add_place_request)
     elif message.text == const.SHOW_LIST:
-        bot.send_message(message.chat.id, 'My places', parse_mode='markdown')
+        bot.send_message(message.chat.id, 'List', parse_mode='markdown')
+    else:
+        bot.send_message(message.chat.id, const.UNKNOWN_OUTPUT, parse_mode='markdown')
+
+
+def add_place_request(message):
+    bot.send_message(message.chat.id, message.text)
+    bot.send_message(message.chat.id, 'Thank you!')
 
 
 bot.infinity_polling()
