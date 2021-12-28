@@ -33,6 +33,9 @@ class Place:
     def get_rating(self):
         return self.rating
 
+    def get_place_desc(self):
+        return self.desc
+
 
 @bot.message_handler(commands=['start'])
 def handle_start(message):
@@ -77,7 +80,7 @@ def handle_buttons(message):
 def add_place_name_request(message):
     new_place = Place()
     new_place.add_place_name(message.text)
-    sent = bot.send_message(message.chat.id, "Please enter rating", parse_mode='markdown')
+    sent = bot.send_message(message.chat.id, 'Please enter rating (1-5)', parse_mode='markdown')
     bot.register_next_step_handler(sent, add_place_rating_request, new_place)
 
 
@@ -85,7 +88,14 @@ def add_place_rating_request(message, new_place):
     if message.text.isnumeric():
         new_place.add_place_rating(int(message.text))
 
-    dbHandler.add_place(message.from_user.id, new_place.get_place_name(), new_place.get_rating())
+    sent = bot.send_message(message.chat.id, 'Please enter description')
+    bot.register_next_step_handler(sent, add_place_description_request, new_place)
+
+
+def add_place_description_request(message, new_place):
+    new_place.add_place_desc(message.text)
+    dbHandler.add_place(message.from_user.id, new_place.get_place_name(), new_place.get_rating(),
+                        new_place.get_place_desc())
     bot.send_message(message.chat.id, 'Place was added')
 
 
